@@ -49,9 +49,9 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     elif request.method == "POST":
-        existing_user_result = db.session.execute(db.select(User).where(User.email == request.form.get("email")))
+        existing_user = db.session.execute(db.select(User).where(User.email == request.form.get("email"))).scalar()
 
-        if existing_user_result is None:
+        if existing_user is None:
             hashed_password = generate_password_hash(request.form.get("password"),
                                                      method="pbkdf2:sha256", salt_length=8)
             new_user = User(email=request.form.get("email"),
